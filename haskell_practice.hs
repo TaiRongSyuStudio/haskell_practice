@@ -217,3 +217,27 @@ map' f (x:xs) = f x : map f xs
 
 map'' :: (a -> b) -> [a] -> [b]
 map'' f xs = [f x | x <- xs]
+
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs)
+       | p x       = x : filter p xs
+       | otherwise = filter p xs
+
+quicksort' :: (Ord a) => [a] -> [a]
+quicksort' [] = []
+quicksort' (x:xs) = 
+     let smallerSorted = quicksort (filter (<=x)xs);
+          biggerSorted = quicksort (filter (>x)xs)
+     in  smallerSorted ++ [x] ++ biggerSorted
+
+chain :: (Integral a) => a -> [a]
+chain 1 = [1]
+chain n
+     | even n = n:chain (n `div` 2)
+     | odd  n = n:chain (n*3 + 1)
+
+--Lambda
+numLongChains :: Int
+numLongChains = length (filter (\xs -> length xs > 15)
+                               (map chain [1..100]))
